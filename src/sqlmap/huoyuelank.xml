@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="huoyuelank">
+  
+    <insert id="insertHuoyuelank" >
+        INSERT INTO huoyuelank  VALUES (#stock_cd#,#fivedayturnover#,#tendayturnover#,#thirtydayturnover#)
+    </insert>
+  
+    <select id="selectHuoyuelank" parameterClass="java.util.Map" resultClass="answer.bean.dto.Huoyuelank">
+        select * from huoyuelank where stock_cd=#stock_cd# 
+        
+    </select>
+
+   <delete id="deleteHuoyuelank" >
+        delete from huoyuelank 
+    </delete>
+  
+</sqlMap>

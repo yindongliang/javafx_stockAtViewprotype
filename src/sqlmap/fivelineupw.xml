@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="fivelineupw">
+  <typeAlias alias="Fivelineupw" type="answer.bean.dto.Fivelineupw" />
+
+  <select id="selectAll" resultClass="Fivelineupw">
+    SELECT *
+      FROM fivelineupw
+  </select>
+
+  <select id="selectAllCond" parameterClass="java.util.HashMap" resultClass="Fivelineupw">
+    SELECT *
+      FROM fivelineupw
+     WHERE 1 = 1
+    <isNotNull property="stock_cd">
+      <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+        stock_cd = #stock_cd#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="record_date">
+      <isNotEqual prepend="AND" property="record_date" compareValue="">
+        record_date = #record_date#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="AND" property="record_date_lessthan">
+      <![CDATA[
+        record_date <= #record_date_lessthan#
+      ]]>
+    </isNotNull>
+    <isNotNull prepend="AND" property="record_date_greaterthan">
+      <![CDATA[
+        record_date >= #record_date_greaterthan#
+      ]]>
+    </isNotNull>
+    <isNotNull property="kdj_type">
+      <isNotEqual prepend="AND" property="kdj_type" compareValue="">
+        kdj_type = #kdj_type#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="macd_type">
+      <isNotEqual prepend="AND" property="macd_type" compareValue="">
+        macd_type = #macd_type#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="deallots_beishu">
+      <isNotEqual prepend="AND" property="deallots_beishu" compareValue="">
+        deallots_beishu = #deallots_beishu#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="price_incr">
+      <isNotEqual prepend="AND" property="price_incr" compareValue="">
+        price_incr = #price_incr#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="three_day_maxincr">
+      <isNotEqual prepend="AND" property="three_day_maxincr" compareValue="">
+        three_day_maxincr = #three_day_maxincr#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="ORDER BY" property="order">
+      <iterate conjunction=",">
+        #orderBy[]#
+      </iterate>
+      $order$
+    </isNotNull>
+    <isNotNull property="limit">
+      LIMIT #limit#
+    </isNotNull>
+  </select>
+
+  <insert id="insertAll" parameterClass="java.util.HashMap">
+    INSERT INTO fivelineupw
+         VALUES (
+                 #stock_cd#,
+                 #record_date#,
+                 #kdj_type#,
+                 #macd_type#,
+                 #deallots_beishu#,
+                 #price_incr#,
+                 #three_day_maxincr#
+                )
+  </insert>
+
+  <insert id="insertAllList" parameterClass="java.util.List">
+    INSERT INTO fivelineupw
+         VALUES
+    <iterate open="(" close=")" conjunction=",">
+      #dt[]#
+    </iterate>
+  </insert>
+
+</sqlMap>

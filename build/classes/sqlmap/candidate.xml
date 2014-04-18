@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="candidate">
+
+    <select id="followrules" parameterClass="java.util.Map" resultClass="answer.bean.dto.Rules">
+ 	<![CDATA[
+  	SELECT * FROM rules where td_apply_counts <>0 
+	]]>
+        order by td_apply_counts desc limit  #limit_rec#
+  		
+    </select>
+  
+    <select id="strongSelectrules" parameterClass="java.util.Map" resultClass="answer.bean.dto.Rules">
+  
+        SELECT * FROM rules as a,
+        (select sum(td_apply_counts) as totc, res_up_down as ud from rules 
+	<![CDATA[
+	where td_apply_counts <>0  group by res_up_down order by totc desc 
+	]]>
+        <isNotEqual  property="limit_rec" compareValue = "0">
+		<![CDATA[
+		limit #limit_rec#
+		 ]]>
+        </isNotEqual>
+        ) as  b 
+	<![CDATA[
+	where a.res_up_down=b.ud and a.res_tot_increase_range>#shanghai_history_incr# and a.td_apply_counts>0
+	and a.td_apply_counts-a.td_apply_down_counts>0
+	]]>
+        order by con_incr_range_from
+    </select>
+  
+    <select id="searchHistory" parameterClass="answer.bean.dto.Alldata" resultClass="answer.bean.dto.Alldata">
+        select stock_cd,yt_close_price,present_price,record_date,record_time,deal_lots from alldata
+        where stock_cd=#stock_cd#
+        order by record_date desc limit #limit_rec#	
+    </select>
+
+    <select id="searchCandidateHistory" parameterClass="java.util.Map" resultClass="answer.bean.dto.Analyzedresultdata">
+        select * from analyzedresultdata
+        where stock_cd=#stock_cd#
+        order by record_date desc
+    </select>
+  
+    <insert id="insert2Result" parameterClass="java.util.Map">
+        insert into analyzedresultdata values(#stock_cd#,
+        #rule_id#,
+        #record_date#,
+        #record_time#,
+        #buy_advisor#,
+        #lotsbili#
+        )	
+    </insert>
+  
+    <select id="checkbeforeinsert" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        select count(stock_cd) from analyzedresultdata
+        where stock_cd=#stock_cd#
+        and record_date=#record_date#
+        and record_time=#record_time#
+        <isNotNull prepend="AND" property="rule_id" >
+            rule_id=#rule_id#
+        </isNotNull>
+         
+    </select>
+    <delete id="deleteSPruleIddata" parameterClass="java.util.Map">
+        delete FROM analyzedresultdata where record_date=#record_date#
+        <isNotNull prepend="AND" property="rule_id" >
+            rule_id=#rule_id#
+        </isNotNull>
+    </delete>
+    <select id="searchAnalyzedData" parameterClass="java.util.Map" resultClass="answer.bean.dto.Analyzedresultdata">
+        select * from (
+        select 
+        d.rule_id as rule_id,
+        d.stock_cd as stock_cd,
+        d.record_date as record_date,
+        d.record_time as record_time,
+        d.res_up_down as res_up_down,
+        d.res_yd_increase_range as res_yd_increase_range,
+        d.res_tot_increase_range as res_tot_increase_range,
+        d.con_ydincrange_accuracy as con_ydincrange_accuracy,
+        d.con_hsrangeammount_accuracy as con_hsrangeammount_accuracy,
+        d.con_incr_range_from as con_incr_range_from,
+        d.con_incr_range_to as con_incr_range_to,
+        d.stockcnt as stockcnt,
+        d.lotsbili as lotsbili,
+        case d.buy_advisor
+        when '0' then '不买：上涨中，放量并下跌'
+        when '1' then '观察：下跌中，放量并下跌'
+        when '9' then '买：上升中，有连续5天缩量涨'
+        when '8' then '买：上升中，有连续4天缩量涨'
+        when '7' then '买：上升中，有连续3天缩量涨'
+        when '6' then '买'
+        when '5' then '买：下跌中，反弹机会'
+        when '4' then '买：上涨中，追涨机会'
+        when '10' then '一般买：上升中，有连续2天缩量涨'
+        when '11' then '不买：上升中，庄家对敲1天，0天缩量涨'
+        end as buy_advisor,
+        
+        case chosendata.status
+        when '1' then '委买'
+        when '2' then '买成'
+        when '3' then '委卖'
+        when '4' then '卖成'
+        end as status
+        from (
+        select 
+        a.rule_id as rule_id,
+        a.stock_cd as stock_cd,
+        a.record_date as record_date,
+        a.record_time as record_time,
+        c.res_up_down as res_up_down,
+        c.res_yd_increase_range as res_yd_increase_range,
+        c.res_tot_increase_range as res_tot_increase_range,
+        c.con_ydincrange_accuracy as con_ydincrange_accuracy,
+        c.con_hsrangeammount_accuracy as con_hsrangeammount_accuracy,
+        c.con_incr_range_from as con_incr_range_from,
+        c.con_incr_range_to as con_incr_range_to,
+        a.buy_advisor as buy_advisor,
+        a.lotsbili as lotsbili,
+        b.stockcnt as stockcnt
+        from analyzedresultdata as a,rules c,
+        (select count(stock_cd) as stockcnt, rule_id from analyzedresultdata,codename_match
+        where record_date=#record_date# 
+        and stock_cd=codename_match.code 
+        and codename_match.name not like '%ST%' 
+        group by rule_id) as b
+        where a.rule_id=b.rule_id
+        and c.rule_id=b.rule_id
+        and a.record_date=#record_date#) as d
+        LEFT JOIN chosendata
+        ON d.stock_cd=chosendata.stock_cd
+        and d.record_date = chosendata.buy_date
+        ) as e, codename_match
+        where e.stock_cd = codename_match.code
+        and codename_match.name not like '%ST%'
+        <isNotNull prepend="AND" property="rule_id" >
+            e.rule_id=#rule_id#
+        </isNotNull>
+    </select>
+  
+</sqlMap>

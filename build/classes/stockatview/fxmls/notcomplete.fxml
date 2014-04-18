@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.collections.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <GridPane id="gridPane1" layoutX="14.0" layoutY="16.0" prefHeight="52.0" prefWidth="625.0">
+      <children>
+        <TextField id="textField3" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <TextField id="textField4" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+        <Label id="label5" text="止损跌幅" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+        <TextField id="textField5" prefWidth="60.0" text="TextField" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+        <TextField id="textField6" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <Label id="label6" text="止盈涨幅" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <Label id="label9" text="刷新间隔" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+        <Label id="label8" text="账户总金额" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+        <TextField id="textField8" prefWidth="200.0" text="TextField" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+        <Label id="label7" text="每股买入金额" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label id="label4" text="最多买入股数" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField id="textField7" prefWidth="110.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="38.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="55.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="30.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="23.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="10.0" prefWidth="120.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="217.0" minWidth="10.0" prefWidth="96.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+    <TableView id="tableView1" layoutX="14.0" layoutY="80.0" prefHeight="360.0" prefWidth="972.0">
+      <columns>
+        <TableColumn prefWidth="75.0" text="选择" />
+        <TableColumn prefWidth="75.0" text="代码">
+          <columns>
+            <TableColumn prefWidth="75.0" text="名称" />
+          </columns>
+        </TableColumn>
+        <TableColumn prefWidth="75.0" text="价格">
+          <columns>
+            <TableColumn prefWidth="75.0" text="当日涨幅" />
+          </columns>
+        </TableColumn>
+        <TableColumn prefWidth="75.0" text="日期">
+          <columns>
+            <TableColumn prefWidth="75.0" text="时间" />
+          </columns>
+        </TableColumn>
+        <TableColumn prefWidth="75.0" text="主要形态" />
+        <TableColumn prefWidth="75.0" text="参数">
+          <columns>
+            <TableColumn prefWidth="75.0" text="波" />
+            <TableColumn prefWidth="75.0" text="骗" />
+            <TableColumn prefWidth="75.0" text="1天" />
+          </columns>
+        </TableColumn>
+        <TableColumn prefWidth="75.0" text="手续费">
+          <columns>
+            <TableColumn prefWidth="75.0" text="纯利" />
+          </columns>
+        </TableColumn>
+        <TableColumn prefWidth="75.0" text="了结时涨幅" />
+        <TableColumn prefWidth="75.0" text="手动操作" />
+      </columns>
+    </TableView>
+    <LineChart id="LineChart" layoutX="14.0" layoutY="448.0" minHeight="118.0" prefHeight="305.0" prefWidth="972.0">
+      <xAxis>
+        <CategoryAxis id="xAxis1" side="BOTTOM">
+          <categories>
+            <FXCollections fx:factory="observableArrayList" />
+          </categories>
+        </CategoryAxis>
+      </xAxis>
+      <yAxis>
+        <NumberAxis id="yAxis1" side="LEFT" />
+      </yAxis>
+    </LineChart>
+    <Button id="button1" layoutX="918.0" layoutY="48.0" text="全部卖出" />
+    <Button id="button2" layoutX="684.0" layoutY="47.0" text="买入选中" />
+  </children>
+</AnchorPane>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <GridPane id="gridPane1" layoutX="14.0" layoutY="16.0" prefWidth="602.0">
+      <children>
+        <Label id="label1" text="开盘震幅" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField id="textField1" prefHeight="22.0" prefWidth="60.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label id="label2" text="~" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+        <TextField id="textField2" prefHeight="22.0" prefWidth="60.0" text="TextField" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+        <Label id="label3" text="高点涨幅" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextField id="textField3" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label id="label4" text="买入点涨幅" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+        <TextField id="textField4" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+        <Label id="label5" text="止损跌幅" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <TextField id="textField5" prefWidth="60.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <TextField id="textField6" prefHeight="22.0" prefWidth="72.0" text="TextField" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+        <Label id="label6" text="止盈涨幅" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+        <Label id="label9" text="买入刷新间隔" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+        <Label id="label10" text="卖出刷新间隔" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+        <TextField id="textField9" prefWidth="200.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        <TextField id="textField10" prefWidth="200.0" text="TextField" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+        <Label id="label7" text="每股买入金额" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+        <TextField id="textField7" prefWidth="110.0" text="TextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <Label id="label8" text="账户总金额" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+        <TextField id="textField8" prefWidth="200.0" text="TextField" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="88.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="96.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="13.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="95.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="75.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="118.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="172.0" minWidth="10.0" prefWidth="118.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+    <TableView id="tableView1" layoutX="14.0" layoutY="178.0" prefHeight="408.0" prefWidth="554.0" />
+  </children>
+</AnchorPane>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="kdj">
+
+    
+  
+    <insert id="insertKdj" >
+        INSERT INTO kdj  VALUES (#stock_cd#, #record_date#, #k#, #d#, #j#)
+    </insert>
+  
+
+    <select id="checkKdjInsert" parameterClass="java.util.Map" resultClass="answer.bean.dto.Kdj">
+        select * from kdj where stock_cd=#stock_cd# 
+        <isNotNull  property="record_date">
+            and  record_date=#record_date#
+        </isNotNull>
+      
+    </select>
+
+    <select id="selectKdj" parameterClass="java.util.Map" resultClass="answer.bean.dto.Kdj">
+        select * from kdj,ften,huoyuelank 
+        where kdj.stock_cd=#stock_cd# 
+        and kdj.stock_cd=ften.stock_cd
+        and kdj.stock_cd=huoyuelank.stock_cd
+        
+        <isNotNull  property="record_date">
+            <![CDATA[
+            and  record_date<=#record_date#
+            ]]>
+        </isNotNull>
+        <isNotNull  property="tendayturnover">
+            <![CDATA[
+            
+            and  huoyuelank.tendayturnover>=#tendayturnover#
+            ]]>
+        </isNotNull>
+        <isNotNull  property="orderby">
+            order by record_date $orderby$
+        </isNotNull>
+	<isNotNull  property="limit">
+            limit #limit#
+        </isNotNull>	
+		 
+    </select>
+  
+</sqlMap>

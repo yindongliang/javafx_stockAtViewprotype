@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="rules">
+
+  <select id="serchExsitingrule" parameterClass="java.util.Map" resultClass="answer.bean.dto.Rules">
+    <![CDATA[
+	select rule_id,hs_apply_ammout,td_apply_counts from rules  where 
+	con_incr_range_from<=#inc#
+	and con_incr_range_to>=#inc#
+	and con_research_days=#historydasy#
+ 	and res_up_down=#updown#
+    and res_yd_increase_range-con_ydincrange_accuracy<=#yesterdayincrrange#
+	and res_yd_increase_range+con_ydincrange_accuracy>=#yesterdayincrrange#
+	and res_tot_increase_range-con_hsrangeammount_accuracy<=#historytotalincrrange#
+	and res_tot_increase_range+con_hsrangeammount_accuracy>=#historytotalincrrange#
+	order by con_ydincrange_accuracy asc
+	]]>
+  </select>
+  
+
+  <select id="searchHistory" parameterClass="answer.bean.dto.Alldata" resultClass="answer.bean.dto.Alldata">
+  	select stock_cd,yt_close_price,present_price,record_date,record_time from alldata
+  	where stock_cd=#stock_cd#
+	order by record_date desc limit #limit_rec#	
+  </select>
+
+  <insert id="insert2rules" parameterClass="java.util.Map">
+	insert into rules values(0,
+	#rangefrom#,
+	#rangeto#,
+	#historydasy#,
+	#hsrangeaccuracy#,
+	#ydrangeaccuracy#,
+	#updown#,
+	#yesterdayincrrange#,
+	#historytotalincrrange#,1,
+	<isNotNull property="td_apply_counts">
+	
+		<isNotEqual  property="td_apply_counts" compareValue="0">
+		1,0)
+		</isNotEqual>
+	</isNotNull>
+	<isNotNull property="td_apply_down_counts">
+		<isNotEqual  property="td_apply_down_counts" compareValue="0">
+		0,1)
+		</isNotEqual>
+	</isNotNull>
+		
+  </insert>
+  
+  <update id="updateRules" parameterClass="java.util.Map">
+	update rules set hs_apply_ammout=#hs_apply_ammout#
+	<isNotNull prepend=", " property="td_apply_counts">
+		<isNotEqual  property="td_apply_counts" compareValue="0">
+		td_apply_counts=#td_apply_counts#
+		</isNotEqual>
+	</isNotNull>
+	<isNotNull prepend=", " property="td_apply_down_counts">
+		<isNotEqual  property="td_apply_down_counts" compareValue="0">
+		td_apply_down_counts=#td_apply_down_counts#
+		</isNotEqual>
+	</isNotNull>
+	where rule_id=#rule_id#
+  </update>
+  
+  <update id="initTodayRules">
+	update rules set td_apply_counts=0,td_apply_down_counts=0
+  </update>
+  
+  <select id="searchRulesForlook" parameterClass="java.util.Map"  resultClass="answer.bean.dto.Rules">
+  	<![CDATA[
+  	SELECT a.rule_id as rule_id,
+	a.con_incr_range_from as con_incr_range_from,
+	a.con_incr_range_to as con_incr_range_to,
+	a.con_research_days as con_research_days,
+	a.con_hsrangeammount_accuracy as con_hsrangeammount_accuracy,
+	a.con_ydincrange_accuracy as con_ydincrange_accuracy,
+	a.res_up_down as res_up_down,
+	a.res_yd_increase_range as res_yd_increase_range,
+	a.res_tot_increase_range as res_tot_increase_range,
+	a.hs_apply_ammout as hs_apply_ammout,
+	a.td_apply_counts as td_apply_counts,
+	a.td_apply_down_counts as td_apply_down_counts, 
+	b.totc as totc,
+	b.totc_down as totc_down
+FROM rules as a,
+	(select sum(td_apply_counts) as totc,sum(td_apply_down_counts) as totc_down, res_up_down as ud from rules 
+	where td_apply_counts >0 group by res_up_down order by totc desc ) as  b 
+	where a.res_up_down=b.ud  and a.td_apply_counts>0 
+	]]>	
+	<isNotEqual prepend="and " property="con_tot_increase_range" compareValue = "">
+	<![CDATA[
+	     a.res_tot_increase_range>#con_tot_increase_range#
+	  ]]>	
+    </isNotEqual>
+    
+  </select>
+  
+
+  
+  <select id="getFirstNpopUpdown" parameterClass="java.util.Map" resultClass="answer.bean.dto.Rules">
+  	<![CDATA[
+  	select count(c.rule_id) from 
+  	(
+  	SELECT a.rule_id as rule_id,
+	a.con_incr_range_from as con_incr_range_from,
+	a.con_incr_range_to as con_incr_range_to,
+	a.con_research_days as con_research_days,
+	a.con_hsrangeammount_accuracy as con_hsrangeammount_accuracy,
+	a.con_ydincrange_accuracy as con_ydincrange_accuracy,
+	a.res_up_down as res_up_down,
+	a.res_yd_increase_range as res_yd_increase_range,
+	a.res_tot_increase_range as res_tot_increase_range,
+	a.hs_apply_ammout as hs_apply_ammout,
+	a.td_apply_counts as td_apply_counts, 
+	a.td_apply_down_counts as td_apply_down_counts, 
+	b.totc as totc
+FROM rules as a,
+  	(select sum(td_apply_counts) as totc, res_up_down as res_up_down from rules 
+	where td_apply_counts <>0 group by res_up_down order by totc desc limit #limit_rec#	) as b 
+	where a.res_up_down=b.res_up_down) as c
+	where c.con_incr_range_from=2.5
+	]]>	
+ 
+  </select>
+  
+</sqlMap>

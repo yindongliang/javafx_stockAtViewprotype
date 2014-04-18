@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="kdjMacdMatchHistory">
+  <typeAlias alias="KdjMacdMatchHistory" type="answer.bean.dto.KdjMacdMatchHistory" />
+
+  <select id="selectAll" resultClass="KdjMacdMatchHistory">
+    SELECT *
+      FROM kdj_macd_match_history
+  </select>
+
+  <select id="selectAllCond" parameterClass="java.util.Map" resultClass="KdjMacdMatchHistory">
+    SELECT *
+      FROM kdj_macd_match_history
+     WHERE 1 = 1
+    <isNotNull property="stock_cd">
+      <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+        stock_cd = #stock_cd#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="record_date">
+      <isNotEqual prepend="AND" property="record_date" compareValue="">
+        record_date = #record_date#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="kdj_type">
+      <isNotEqual prepend="AND" property="kdj_type" compareValue="">
+        kdj_type = #kdj_type#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="macd_type">
+      <isNotEqual prepend="AND" property="macd_type" compareValue="">
+        macd_type = #macd_type#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="second_day_incr">
+      <isNotEqual prepend="AND" property="second_day_incr" compareValue="">
+        second_day_incr = #second_day_incr#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="ORDER BY" property="order">
+      <iterate conjunction=",">
+        #orderBy[]#
+      </iterate>
+      $order$
+    </isNotNull>
+    <isNotNull property="limit">
+      LIMIT #limit#
+    </isNotNull>
+  </select>
+
+  <insert id="insertAll" parameterClass="java.util.Map">
+    INSERT INTO kdj_macd_match_history
+         VALUES (
+                 #stock_cd#,
+                 #record_date#,
+                 #kdj_type#,
+                 #macd_type#,
+                 #second_day_incr#
+                )
+  </insert>
+
+  <insert id="insertAllList" parameterClass="java.util.List">
+    INSERT INTO kdj_macd_match_history
+         VALUES
+    <iterate open="(" close=")" conjunction=",">
+      #dt[]#
+    </iterate>
+  </insert>
+
+</sqlMap>

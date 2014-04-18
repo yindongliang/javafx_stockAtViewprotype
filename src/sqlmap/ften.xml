@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ften">
+
+  
+    <insert id="insertFten" >
+        INSERT INTO ften  VALUES (#stock_cd#,#stock_name#,#meigusy#,#meigujzc#,
+        #meigugjj#,
+        #meiguwfplr#,
+        #liutonggu#,#tongbiincr#,#jingzcbenifitrate#,#liutonggudongchigubili#,#suosuhangye#,#update_date#)
+    </insert>
+  
+
+    <select id="selectFten" parameterClass="java.util.Map" resultClass="answer.bean.dto.Ften">
+        select * from ften where stock_cd=#stock_cd# 
+        
+    </select>
+
+
+    <delete id="deleteFten">
+        delete from ften
+        
+    </delete>
+  
+</sqlMap>

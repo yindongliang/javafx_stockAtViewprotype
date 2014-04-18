@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="performances">
+
+    <select id="selectSellableStock"  resultClass="answer.bean.dto.Chosendata">
+        SELECT 
+        chosendata.stock_cd  ,
+        chosendata.rest_sq  ,
+        chosendata.buy_lots ,
+        chosendata.buy_price ,
+        chosendata.sell_lots ,
+        chosendata.sell_price ,
+        chosendata.incr_range_compare_bought,
+        chosendata.pure_benifit ,
+        chosendata.handle_charge ,
+        chosendata.bought_shanghai_price ,
+        chosendata.buy_date ,
+        chosendata.buy_time, 
+        chosendata.sell_date  ,
+        chosendata.sell_time  ,
+        case chosendata.status 
+        when '1' then '委买'
+        when '2' then '买成'
+        when '3' then '委卖'
+        when '4' then '卖成'
+        end as status,
+        
+        codename_match.name
+        from 
+        chosendata,codename_match
+        where chosendata.sell_date is null
+        and chosendata.stock_cd=codename_match.code
+   	
+    </select>
+
+  
+    <insert id="insert2ChosendataPF" parameterClass="answer.bean.dto.ChosendataPF">
+        insert into chosendata_pf values(#stock_cd#,#incr_range_compare_bought#,#bought_date#,#record_date#,#record_time#)
+    </insert>
+
+    <insert id="insert2ChosendatasAVEPF" parameterClass="java.util.Map">
+        insert into chosendata_ave_pf values(#incr_ave#,#bought_date#,#record_date#,#record_time#)
+    </insert>
+
+    <select id="selectTargetStockPFMM" parameterClass="java.util.Map" resultClass="answer.bean.dto.ChosendataPF">
+    
+        SELECT max(incr_range_compare_bought) as mxincr,min(incr_range_compare_bought) as minincr from chosendata_pf where stock_cd=#stock_cd#
+        and record_date=#record_date# 
+	
+    </select>
+  
+    <select id="selectTargetStockPF" parameterClass="java.util.Map" resultClass="answer.bean.dto.ChosendataPF">
+        SELECT * from chosendata_pf a,
+        (select bought_date as bt from chosendata_pf order by bought_date desc limit 1) b 
+        where a.stock_cd=#stock_cd#
+        and a.record_date=#record_date#  
+        and a.bought_date=b.bt
+        order by a.record_time asc
+	
+    </select>
+  
+  
+    <select id="selectTotalBoughtStocksPF"  resultClass="java.math.BigDecimal">
+    
+        SELECT sum(incr_range_compare_bought) from chosendata_pf where record_date=#record_date#
+	
+    </select>
+
+  
+</sqlMap>

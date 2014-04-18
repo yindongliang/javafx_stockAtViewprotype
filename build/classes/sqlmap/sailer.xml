@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="sailer">
+
+  <update id="updateSailstock" parameterClass="java.util.Map">
+    <![CDATA[
+	update chosendata  set sell_lots=buy_lots,
+	sell_price=#sell_price#,
+	incr_range_compare_bought=#incr_range_compare_bought#,
+	pure_benifit=#pure_benifit#,
+	sell_date=#sell_date#,
+	sell_time=#sell_time#,
+	status=#status# 
+	where 
+	stock_cd=#stock_cd#
+	and  status='2'
+	and buy_date=#buy_date#
+	]]>
+  </update>
+
+  <update id="updateSailstockStatus" parameterClass="java.util.Map">
+    <![CDATA[
+	update chosendata  set 
+	status=#status# 
+	where 
+	stock_cd=#stock_cd#
+	and  status='2'
+	and buy_date=#buy_date#
+	]]>
+  </update>
+  <select id="searchBeforSell" parameterClass="java.util.Map" resultClass="answer.bean.dto.Chosendata">
+    <![CDATA[
+	select stock_cd,buy_lots,buy_date from chosendata  where 
+	stock_cd=#stock_cd#
+	and sell_date is null
+	
+	]]>
+  </select>
+  
+</sqlMap>

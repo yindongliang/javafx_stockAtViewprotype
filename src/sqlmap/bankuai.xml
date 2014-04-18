@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="bankuai">
+    <typeAlias alias="Bankuai" type="answer.bean.dto.Bankuai" />
+
+    <select id="selectAll" resultClass="Bankuai">
+        SELECT *
+        FROM bankuai
+    </select>
+
+    <select id="selectAllCond" parameterClass="java.util.Map"  resultClass="Bankuai">
+        SELECT *
+        FROM bankuai
+        WHERE 1 = 1
+        <isNotNull property="bankuai_cd">
+            <isNotEqual prepend="AND" property="bankuai_cd" compareValue="">
+                bankuai_cd = #bankuai_cd#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="bankuai_name">
+            <isNotEqual prepend="AND" property="bankuai_name" compareValue="">
+                bankuai_name = #bankuai_name#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull prepend="ORDER BY" property="order">
+            <iterate conjunction=",">
+                #orderBy[]#
+            </iterate>
+            $order$
+        </isNotNull>
+        <isNotNull property="limit">
+            LIMIT #limit#
+        </isNotNull>
+    </select>
+
+    <insert id="insertAll" parameterClass="java.util.Map" >
+        INSERT INTO bankuai
+        VALUES (
+        #bankuai_cd#,
+        #bankuai_name#
+        )
+    </insert>
+
+    <insert id="insertAllList" parameterClass="java.util.List">
+        INSERT INTO bankuai
+        VALUES
+        <iterate open="(" close=")" conjunction=",">
+            #dt[]#
+        </iterate>
+    </insert>
+    <delete id="deleteExsitingdata" parameterClass="java.util.Map" >
+        delete from bankuai 
+        
+        where 1=1
+        <isNotNull property="bankuai_cd">
+            <isNotEqual prepend="AND" property="bankuai_cd" compareValue="">
+                bankuai_cd = #bankuai_cd#
+            </isNotEqual>
+        </isNotNull>
+      
+       
+    </delete>
+
+</sqlMap>

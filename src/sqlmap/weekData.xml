@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="weekData">
+  <typeAlias alias="WeekData" type="answer.bean.dto.WeekData" />
+
+  <select id="selectAll" resultClass="WeekData">
+    SELECT *
+      FROM week_data
+  </select>
+
+  <select id="selectAllCond" parameterClass="java.util.Map" resultClass="WeekData">
+    SELECT *
+      FROM week_data
+     WHERE 1 = 1
+    <isNotNull property="stock_cd">
+      <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+        stock_cd = #stock_cd#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="record_date">
+      <isNotEqual prepend="AND" property="record_date" compareValue="">
+        record_date = #record_date#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="AND" property="open_price">
+      open_price = #open_price#
+    </isNotNull>
+    <isNotNull prepend="AND" property="close_price">
+      close_price = #close_price#
+    </isNotNull>
+    <isNotNull prepend="AND" property="deal_lots">
+      deal_lots = #deal_lots#
+    </isNotNull>
+    <isNotNull prepend="AND" property="high_price">
+      high_price = #high_price#
+    </isNotNull>
+    <isNotNull prepend="AND" property="low_price">
+      low_price = #low_price#
+    </isNotNull>
+    <isNotNull prepend="ORDER BY" property="order">
+      <iterate conjunction=",">
+        #orderBy[]#
+      </iterate>
+      $order$
+    </isNotNull>
+    <isNotNull property="limit">
+      LIMIT #limit#
+    </isNotNull>
+  </select>
+
+  <insert id="insertAll" parameterClass="java.util.Map">
+    INSERT INTO week_data
+         VALUES (
+                 #stock_cd#,
+                 #record_date#,
+                 #open_price#,
+                 #close_price#,
+                 #deal_lots#,
+                 #high_price#,
+                 #low_price#
+                )
+  </insert>
+
+  <insert id="insertAllList" parameterClass="java.util.List">
+    INSERT INTO week_data
+         VALUES
+    <iterate open="(" close=")" conjunction=",">
+      #dt[]#
+    </iterate>
+  </insert>
+
+</sqlMap>

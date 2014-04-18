@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="MacdBankuai">
+  <typeAlias alias="MacdBankuai" type="answer.bean.dto.MacdBankuai" />
+
+  <select id="selectAll" resultClass="MacdBankuai">
+    SELECT *
+      FROM macd_bankuai
+  </select>
+
+  <select id="selectAllCond" parameterClass="MacdBankuai" resultClass="MacdBankuai">
+    SELECT *
+      FROM macd_bankuai
+     WHERE 1 = 1
+    <isNotNull property="bankuai_cd">
+      <isNotEqual prepend="AND" property="bankuai_cd" compareValue="">
+        bankuai_cd = #bankuai_cd#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="record_date">
+      <isNotEqual prepend="AND" property="record_date" compareValue="">
+        record_date = #record_date#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="AND" property="dif">
+      dif = #dif#
+    </isNotNull>
+    <isNotNull prepend="AND" property="dea">
+      dea = #dea#
+    </isNotNull>
+    <isNotNull prepend="AND" property="sema">
+      sema = #sema#
+    </isNotNull>
+    <isNotNull prepend="AND" property="lema">
+      lema = #lema#
+    </isNotNull>
+    <isNotNull prepend="AND" property="bar">
+      bar = #bar#
+    </isNotNull>
+    <isNotNull prepend="ORDER BY" property="order">
+      <iterate conjunction=",">
+        #orderBy[]#
+      </iterate>
+      $order$
+    </isNotNull>
+    <isNotNull property="limit">
+      LIMIT #limit#
+    </isNotNull>
+  </select>
+
+  <insert id="insertAll" parameterClass="MacdBankuai">
+    INSERT INTO macd_bankuai
+         VALUES (
+                 #bankuai_cd#,
+                 #record_date#,
+                 #dif#,
+                 #dea#,
+                 #sema#,
+                 #lema#,
+                 #bar#
+                )
+  </insert>
+
+  <insert id="insertAllList" parameterClass="java.util.List">
+    INSERT INTO macd_bankuai
+         VALUES
+    <iterate open="(" close=")" conjunction=",">
+      #dt[]#
+    </iterate>
+  </insert>
+
+</sqlMap>

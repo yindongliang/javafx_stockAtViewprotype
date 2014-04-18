@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="macdweek">
+    <typeAlias alias="Macd" type="answer.bean.dto.Macd" />
+
+    <select id="selectAll" resultClass="Macd">
+        SELECT *
+        FROM macdweek
+    </select>
+
+    <select id="selectAllCond" parameterClass="java.util.Map" resultClass="Macd">
+        SELECT *
+        FROM macdweek
+        WHERE 1 = 1
+        <isNotNull property="stock_cd">
+            <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+                stock_cd = #stock_cd#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="dif">
+            <isNotEqual prepend="AND" property="dif" compareValue="">
+                dif = #dif#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="dea">
+            <isNotEqual prepend="AND" property="dea" compareValue="">
+                dea = #dea#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="sema">
+            <isNotEqual prepend="AND" property="sema" compareValue="">
+                sema = #sema#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="lema">
+            <isNotEqual prepend="AND" property="lema" compareValue="">
+                lema = #lema#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="bar">
+            <isNotEqual prepend="AND" property="bar" compareValue="">
+                bar = #bar#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="record_date">
+            <isNotEqual prepend="AND" property="record_date" compareValue="">
+        <![CDATA[
+             record_date=#record_date#
+            ]]>
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="record_date_to">
+            <isNotEqual prepend="AND" property="record_date_to" compareValue="">
+        <![CDATA[
+             record_date<=#record_date_to#
+            ]]>
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull prepend="ORDER BY" property="order">
+            record_date $order$
+        </isNotNull>
+        <isNotNull property="limit">
+            LIMIT #limit#
+        </isNotNull>
+    </select>
+
+    <insert id="insertAll" parameterClass="java.util.Map">
+        INSERT INTO macdweek
+        VALUES (
+        #stock_cd#,
+        #record_date#,
+        #dif#,
+        #dea#,
+        #sema#,
+        #lema#,
+        #bar#
+        )
+    </insert>
+
+    <insert id="insertAllList" parameterClass="java.util.List">
+        INSERT INTO macdweek
+        VALUES
+        <iterate open="(" close=")" conjunction=",">
+            #dt[]#
+        </iterate>
+    </insert>
+</sqlMap>

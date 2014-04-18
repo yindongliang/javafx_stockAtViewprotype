@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import com.sai.javafx.calendar.*?>
+
+<AnchorPane id="Content" minHeight="0.0" minWidth="0.0" prefHeight="700.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml" fx:controller="stockatview.handle.ChooseStock">
+  <children>
+    <VBox id="vBox1" prefHeight="716.0" prefWidth="1186.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <children>
+        <VBox id="vBox2" prefHeight="77.0">
+          <children>
+            <GridPane id="gridPane1" prefHeight="76.0">
+              <children>
+                <Label id="label3" text="1.规则选择" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                  <GridPane.margin>
+                    <Insets fx:id="x1" />
+                  </GridPane.margin>
+                </Label>
+                <RadioButton id="radioButton1" fx:id="todayfarword" prefWidth="125.0" text="今日最多向量" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.margin="$x1" GridPane.rowIndex="1" />
+                <RadioButton id="radioButton2" fx:id="todaynot0" text="1算法" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <TextField id="textField1" fx:id="limitrule" alignment="CENTER_RIGHT" prefWidth="34.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label id="label4" text="条向量匹配" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <Label id="label2" text="2.选取" GridPane.columnIndex="8" GridPane.rowIndex="0" />
+                <Button id="button1" onAction="#handleCandidateAction" text="开始选取" GridPane.columnIndex="9" GridPane.rowIndex="1" />
+                <Button id="button2" onAction="#handleAbortAction" text="取消" GridPane.columnIndex="10" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <Label id="label1" text="选取进度" GridPane.columnIndex="9" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                <ProgressBar id="progressBar1" fx:id="compgr" prefWidth="867.0" progress="0.0" GridPane.columnIndex="10" GridPane.rowIndex="2" />
+                <ProgressIndicator id="progressIndicator1" fx:id="proindic" progress="0.0" GridPane.columnIndex="11" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+                <Separator id="separatorVertical1" orientation="VERTICAL" prefHeight="75.0" prefWidth="24.000099999997474" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.rowSpan="2147483647" />
+                <TextField id="textField3" fx:id="con_amount_incr" alignment="CENTER_RIGHT" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                <Label id="label8" text="累计涨幅大于" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                <Label id="label9" text="\%" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                <Label id="label6" fx:id="timer" prefWidth="117.0" GridPane.columnIndex="12" GridPane.rowIndex="1" />
+              </children>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="78.0" minWidth="10.0" prefWidth="78.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="5.0" prefWidth="26.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="74.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.0" minWidth="10.0" prefWidth="76.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="10.0" prefWidth="55.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="36.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="10.0" prefWidth="32.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="0.0" prefWidth="0.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="10.0" prefWidth="67.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="89.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="143.0" minWidth="10.0" prefWidth="136.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="10.0" prefWidth="30.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.0" minWidth="10.0" prefWidth="94.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="10.0" prefWidth="62.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="10.0" prefWidth="62.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="69.0" minWidth="10.0" prefWidth="62.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+          </children>
+        </VBox>
+        <Separator id="separatorHorizontal2" prefHeight="8.0" prefWidth="972.0" />
+        <VBox id="vBox3" prefHeight="65.0" prefWidth="972.0">
+          <children>
+            <GridPane id="gridPane2" prefHeight="64.0" snapToPixel="false">
+              <children>
+                <Label id="label5" prefHeight="16.0" text="3.查询" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label id="label7" text="日期" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <!--<TextField id="textField2" fx:id="search_date" prefWidth="200.0" text="TextField" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="1" />-->
+                <FXCalendar id="textField2" fx:id="search_date"  GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="1" />
+                <Button id="button3" onAction="#handleSearchAction" text="检索" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                <Label id="label10" fx:id="recordscnt" GridPane.columnIndex="6" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                  <font>
+                    <Font size="10.0" />
+                  </font>
+                  <textFill>
+                    <Color blue="0.200" green="0.200" red="1.000" fx:id="x2" />
+                  </textFill>
+                </Label>
+                <Label id="label11" text="账户状态" GridPane.columnIndex="8" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+                <Label id="label12" text="可用资金：" GridPane.columnIndex="9" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                <Label id="label15" fx:id="usable_money" textFill="$x2" GridPane.columnIndex="11" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                <Button id="button6" onAction="#handleUpdateStatusAction" text="刷新状态" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+              </children>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="375.0" prefWidth="78.52083333333333" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="0.0" prefWidth="38.52083333333333" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="775.0" minWidth="9.0" prefWidth="23.520833333333343" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="775.0" minWidth="4.909090909090935" prefWidth="13.520833333333371" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="775.0" minWidth="9.0" prefWidth="49.520833333333314" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="775.0" minWidth="0.0" prefWidth="55.520833333333314" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="870.0" minWidth="10.0" prefWidth="23.52083333333337" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="782.0" minWidth="3.0" prefWidth="39.6875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="782.0" minWidth="3.0" prefWidth="16.6875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="782.0" minWidth="3.0" prefWidth="20.6875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="782.0" minWidth="3.0" prefWidth="21.6875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="870.0" minWidth="10.0" prefWidth="70.52083333333336" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="782.0" minWidth="0.0" prefWidth="76.52083333333336" />
+                <ColumnConstraints maxWidth="499.0" prefWidth="72.52083333333336" />
+                <ColumnConstraints maxWidth="499.0" prefWidth="108.52083333333336" />
+                <ColumnConstraints maxWidth="393.0" prefWidth="262.52083333333326" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="116.0" minHeight="5.0" prefHeight="19.333333333333332" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="116.0" minHeight="5.0" prefHeight="21.333333333333332" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="115.0" minHeight="10.0" prefHeight="23.333333333333336" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+          </children>
+        </VBox>
+        <Separator id="separatorHorizontal1" prefHeight="14.0" prefWidth="972.0" />
+        <HBox id="hBox1" prefHeight="500.0" prefWidth="1200.0">
+          <children>
+            <TableView id="tableView1" fx:id="resulttb" prefHeight="414.0" prefWidth="695.0">
+              <columns>
+                <TableColumn prefWidth="45.0" text="选择" fx:id="chose" />
+                <TableColumn prefWidth="65.0" text="规则号码" fx:id="rule_id" />
+                <TableColumn prefWidth="65.0" text="股票代码" fx:id="stock_cd" />
+                <TableColumn prefWidth="40.0" text="走势" fx:id="track" />
+                <TableColumn prefWidth="65.0" text="所属向量" fx:id="res_up_down"/>
+                <TableColumn prefWidth="85.0" text="记录日期" fx:id="record_date" />
+                <TableColumn prefWidth="75.0" text="记录时间" fx:id="record_time" />
+                <TableColumn prefWidth="35.0" text="集计" fx:id="amount" />
+                <TableColumn prefWidth="35.0" text="量比" fx:id="liangbi" />
+                <TableColumn prefWidth="35.0" text="状态" fx:id="status" />
+                <TableColumn prefWidth="35.0" text="建议" fx:id="advisor" />
+                <TableColumn prefWidth="75.0" text="股票名称" fx:id="stockname" />
+              </columns>
+            </TableView>
+            <Separator id="separatorVertical3" orientation="VERTICAL" prefHeight="414.0" prefWidth="4.0" />
+            <TabPane id="tabPane1" prefHeight="414.0" prefWidth="606.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab id="tab1" text="规则图">
+                  <content>
+                    <ScrollPane id="scrollPane1" prefHeight="200.0" prefWidth="200.0">
+                      <content>
+                        <BarChart fx:id="rulechart" prefHeight="430.0" prefWidth="2965.0">
+                          <xAxis>
+                            <CategoryAxis id="xAxis1" fx:id="incrrange" side="BOTTOM">
+                              <categories>
+                                <FXCollections fx:factory="observableArrayList" />
+                              </categories>
+                            </CategoryAxis>
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis id="yAxis1" fx:id="stockcnt" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                      </content>
+                    </ScrollPane>
+                  </content>
+                </Tab>
+                <Tab id="tab2" text="板块图">
+                  <content>
+                    <VBox id="vBox4" prefHeight="200.0" prefWidth="100.0">
+                      <children>
+                        <PieChart id="PieChart" fx:id="categorychart" prefHeight="430.0" />
+                      </children>
+                    </VBox>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
+          </children>
+        </HBox>
+        <GridPane id="gridPane3" prefHeight="65.0" prefWidth="972.0">
+          <children>
+            <Button id="button4" onAction="#handleSelectAllAction" text="全选/全解除" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Button id="button5" onAction="#handleBuySelectedStockction" text="买入选中股票" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <TextField id="textField4" fx:id="eve_stock_buymoney" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label id="label13" contentDisplay="RIGHT" text="以每只股票大约" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+            <Label id="label14" text="元" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <TextField id="textField5" fx:id="target_ruleid" prefWidth="100.0" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.rowIndex="1" />
+            <Label id="label16" prefWidth="60.0" text="目标规则：" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="138.0" minWidth="10.0" prefWidth="63.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="93.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="20.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="219.0" minWidth="10.0" prefWidth="110.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="78.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="78.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="78.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="78.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="78.0" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="7.0" prefHeight="7.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="19.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="11.0" vgrow="SOMETIMES" />
+          </rowConstraints>
+        </GridPane>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

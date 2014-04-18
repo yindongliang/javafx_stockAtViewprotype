@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="temp">
+
+  <select id="checkPerformance" parameterClass="java.util.Map" resultClass="answer.bean.dto.Analyzedresultdata">
+    <![CDATA[
+	select b6.rule_id,b6.stock_cd,b6.record_date, b6.record_time from analyzedresultdata b6 where b6.stock_cd='600061' or b6.stock_cd='600163'
+	or b6.stock_cd='600400'
+	or b6.stock_cd='600481'
+	or b6.stock_cd='600510'
+	]]>
+  </select>
+    
+</sqlMap>

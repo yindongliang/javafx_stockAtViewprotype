@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="StockATView.jnlp">
+  <information>
+    <title>StockATView</title>
+    <vendor>doyin</vendor>
+    <description>Sample JavaFX 2.0 application.</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <jfx:javafx-runtime version="2.0+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
+  </resources>
+  <resources>
+    <j2se version="1.6+" java-vm-args="-Xmx512m -XX:MaxPermSize=256m -Djava.security.policy=.java.policy "  href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="StockATView.jar" size="576599" download="eager" />
+    <jar href="lib/JNative.jar" size="426280" download="eager" />
+    <jar href="lib/axis.jar" size="1599570" download="eager" />
+    <jar href="lib/burlap.jar" size="84871" download="eager" />
+    <jar href="lib/commons-beanutils.jar" size="188671" download="eager" />
+    <jar href="lib/commons-codec-1.4.jar" size="58160" download="eager" />
+    <jar href="lib/commons-collections.jar" size="571259" download="eager" />
+    <jar href="lib/commons-configuration-1.8.jar" size="354491" download="eager" />
+    <jar href="lib/commons-dbcp.jar" size="120867" download="eager" />
+    <jar href="lib/commons-digester.jar" size="255505" download="eager" />
+    <jar href="lib/commons-discovery.jar" size="76685" download="eager" />
+    <jar href="lib/commons-lang-2.3.jar" size="245274" download="eager" />
+    <jar href="lib/commons-logging-1.1.1.jar" size="60686" download="eager" />
+    <jar href="lib/commons-pool.jar" size="42424" download="eager" />
+    <jar href="lib/commons-validator-1.3.1.jar" size="138956" download="eager" />
+    <jar href="lib/datafx-redfx.jar" size="4364" download="eager" />
+    <jar href="lib/datafx.jar" size="100459" download="eager" />
+    <jar href="lib/hessian-3.0.1.jar" size="113665" download="eager" />
+    <jar href="lib/hsqldb.jar" size="1849249" download="eager" />
+    <jar href="lib/httpasyncclient-4.0-beta1.jar" size="81165" download="eager" />
+    <jar href="lib/httpclient-4.2-beta1.jar" size="420207" download="eager" />
+    <jar href="lib/httpcore-4.2-beta1.jar" size="218700" download="eager" />
+    <jar href="lib/httpcore-nio-4.2-beta1.jar" size="285078" download="eager" />
+    <jar href="lib/ibatis-2.3.4.726.jar" size="384363" download="eager" />
+    <jar href="lib/ibatis-common-2.jar" size="84742" download="eager" />
+    <jar href="lib/ibatis-sqlmap-2.jar" size="292503" download="eager" />
+    <jar href="lib/jaxrpc.jar" size="32071" download="eager" />
+    <jar href="lib/jstl.jar" size="20682" download="eager" />
+    <jar href="lib/log4j-1.2.15.jar" size="391834" download="eager" />
+    <jar href="lib/mysql-connector-java-5.1.18-bin.jar" size="789885" download="eager" />
+    <jar href="lib/mysql-connector-java-5.1.19-bin.jar" size="801912" download="eager" />
+    <jar href="lib/org.apache.httpcomponents.httpclient_4.2-beta1.jar" size="631623" download="eager" />
+    <jar href="lib/org.apache.httpcomponents.httpcore_4.1.4.jar" size="383590" download="eager" />
+    <jar href="lib/pinyin4j-1.1.0.jar" size="100733" download="eager" />
+    <jar href="lib/redfx-client-java-1.0.jar" size="22225" download="eager" />
+    <jar href="lib/redfx-common-1.0.jar" size="5323" download="eager" />
+    <jar href="lib/saaj.jar" size="18979" download="eager" />
+    <jar href="lib/servlet-api.jar" size="88537" download="eager" />
+    <jar href="lib/spring-webmvc-2.5.2.jar" size="396247" download="eager" />
+    <jar href="lib/spring-webmvc-struts.jar" size="36749" download="eager" />
+    <jar href="lib/spring.jar" size="2949032" download="eager" />
+    <jar href="lib/standard.jar" size="293750" download="eager" />
+    <jar href="lib/struts-taglib-1.3.8.jar" size="251521" download="eager" />
+    <jar href="lib/struts.jar" size="549876" download="eager" />
+    <jar href="lib/terasoluna-thin-server.jar" size="262690" download="eager" />
+    <jar href="lib/wsdl4j.jar" size="148429" download="eager" />
+  </resources>
+  <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="StockATView" >
+    <param name="requiredFXVersion" value="2.0+"/>
+  </applet>
+  <jfx:javafx-desc  width="800" height="600" main-class="stockatview.StockATView"  name="StockATView" />
+  <update check="always"/>
+</jnlp>

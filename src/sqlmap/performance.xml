@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="performance">
+
+  <select id="checkPerformance" parameterClass="java.util.Map" resultClass="answer.bean.dto.Analyzedresultdata">
+    <![CDATA[
+    SELECT * FROM analyzedresultdata a, (select record_date as rd from analyzedresultdata order by record_date desc limit 1) b
+	where a.record_date=b.rd
+	
+	]]>
+  </select>
+    
+    <select id="checkPerformancebydate" parameterClass="java.util.Map" resultClass="answer.bean.dto.Analyzedresultdata">
+    <![CDATA[
+    SELECT * FROM analyzedresultdata 
+	where record_date='2012-06-13'
+	]]>
+  </select>
+</sqlMap>

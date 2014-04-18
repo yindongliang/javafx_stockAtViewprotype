@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="tablemaintain">
+
+    <insert id="insert2CodeNameTable" parameterClass="java.util.List">
+        insert into codename_match values
+        <iterate  open="(" close=")" conjunction=",">
+            #dt[]#        
+        </iterate>
+    </insert>
+  
+    <insert id="insert1rule" >
+        INSERT INTO rules  VALUES (1, 0, 0, 0, 0, 0, '0', 0, 0, 0, 0, 0)
+    </insert>
+  
+
+    <select id="checkCodeNameTableBeforeInsert" parameterClass="java.util.Map" resultClass="answer.bean.dto.Codenamematch">
+        select * from codename_match where code=#code#
+    </select>
+
+  
+  
+    <update id="updateCodeNameTable" parameterClass="java.util.Map">
+        update codename_match set 
+        <isNotNull property="name">
+            name=#name#
+            <isNotNull prepend=", " property="more_info">
+                more_info=#more_info#
+            </isNotNull>
+        </isNotNull>
+        <isNull property="name">
+            <isNotNull  property="more_info">
+                more_info=#more_info#
+            </isNotNull>
+        </isNull>
+        where code=#code#
+    </update>
+  
+    <update id="clearAlldataWithspecificdate" parameterClass="java.lang.String">
+        delete from  alldata 
+    <![CDATA[
+    where record_date<#record_date#
+    ]]>
+    </update>
+  
+    <update id="clearruledata">
+        delete from rules 
+    </update>
+    <update id="clearAnaylyzeDataWithspecificdate" parameterClass="java.lang.String">
+        delete from analyzedresultdata 
+    <![CDATA[
+    where record_date<#record_date#
+    ]]>
+    </update>
+</sqlMap>

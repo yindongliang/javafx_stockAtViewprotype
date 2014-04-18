@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="buyer">
+
+  <select id="searchBeforBuy" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+    <![CDATA[
+	select count(stock_cd) from chosendata  where 
+	stock_cd=#stock_cd#
+	and sell_date is null
+	
+	]]>
+  </select>
+
+  <insert id="insert2chosendata" parameterClass="answer.bean.dto.Chosendata">
+	insert into chosendata values(
+	#stock_cd#,
+	#rest_sq#,
+	#buy_lots#,
+	#buy_price#,
+	#sell_lots#,
+	#sell_lots#,
+	#incr_range_compare_bought#,
+	#pure_benifit#,
+	#handlecharge#,
+	#bought_shanghai_price#,
+	#buy_date#,
+	#buy_time#,
+	#sell_date#,
+	#sell_time#,
+	'1'
+	)
+	
+  </insert>
+  
+  <update id="updateChosendata" parameterClass="java.util.Map">
+	update chosendata set status=#status#
+	where stock_cd=#stock_cd#
+	and buy_date=#buy_date#
+  </update>
+  
+  
+</sqlMap>

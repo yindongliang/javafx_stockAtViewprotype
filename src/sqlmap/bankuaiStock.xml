@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="bankuaiStock">
+    <typeAlias alias="BankuaiStock" type="answer.bean.dto.BankuaiStock" />
+
+    <select id="selectAll" resultClass="BankuaiStock">
+        SELECT *
+        FROM bankuai_stock
+    </select>
+
+    <select id="selectAllCond" parameterClass="java.util.Map"  resultClass="BankuaiStock">
+        SELECT *
+        FROM bankuai_stock
+        WHERE 1 = 1
+        <isNotNull property="stock_cd">
+            <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+                stock_cd = #stock_cd#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="market_cd">
+            <isNotEqual prepend="AND" property="market_cd" compareValue="">
+                market_cd = #market_cd#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull property="bankuai_cd">
+            <isNotEqual prepend="AND" property="bankuai_cd" compareValue="">
+                bankuai_cd = #bankuai_cd#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull prepend="ORDER BY" property="order">
+            <iterate conjunction=",">
+                #orderBy[]#
+            </iterate>
+            $order$
+        </isNotNull>
+        <isNotNull property="limit">
+            LIMIT #limit#
+        </isNotNull>
+    </select>
+
+    <insert id="insertAll" parameterClass="java.util.Map" >
+        INSERT INTO bankuai_stock
+        VALUES (
+        #stock_cd#,
+        #market_cd#,
+        #bankuai_cd#
+        )
+    </insert>
+    <update id="updateData" parameterClass="java.util.Map" >
+        update  bankuai_stock set bankuai_cd=#bankuai_cd#
+        where stock_cd=#stock_cd#
+        and market_cd=#market_cd#
+         
+    </update>
+
+    <insert id="insertAllList" parameterClass="java.util.List">
+        INSERT INTO bankuai_stock
+        VALUES
+        <iterate open="(" close=")" conjunction=",">
+            #dt[]#
+        </iterate>
+    </insert>
+    <delete id="deleteExsitingdata" parameterClass="java.util.Map" >
+        delete from bankuai_stock 
+        where 1=1
+        <isNotNull property="stock_cd">
+            <isNotEqual prepend="AND" property="stock_cd" compareValue="">
+                stock_cd = #stock_cd#
+            </isNotEqual>
+        </isNotNull>
+       
+    </delete>
+</sqlMap>

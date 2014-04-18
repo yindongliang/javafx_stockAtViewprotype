@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+    <settings useStatementNamespaces="true"/>
+    
+    <sqlMap resource="sqlmap/download.xml"/>
+    <sqlMap resource="sqlmap/rules.xml"/>
+    <sqlMap resource="sqlmap/candidate.xml"/>
+    <sqlMap resource="sqlmap/performance.xml"/>
+    <sqlMap resource="sqlmap/temp.xml"/>
+    <sqlMap resource="sqlmap/performance_real.xml"/>
+    <sqlMap resource="sqlmap/buyer.xml"/>
+    <sqlMap resource="sqlmap/sailer.xml"/>
+    <sqlMap resource="sqlmap/tablemaintain.xml"/>
+    <sqlMap resource="sqlmap/kdj.xml"/>
+    <sqlMap resource="sqlmap/ften.xml"/>
+    <sqlMap resource="sqlmap/huoyuelank.xml"/>
+    <sqlMap resource="sqlmap/kdjrule.xml"/>
+    <sqlMap resource="sqlmap/macd.xml"/>
+    <sqlMap resource="sqlmap/macdweek.xml"/>
+    <sqlMap resource="sqlmap/kdjMacdMatchHistory.xml"/>
+    <sqlMap resource="sqlmap/fivelineupw.xml"/>
+    <sqlMap resource="sqlmap/bankuai.xml"/>
+    <sqlMap resource="sqlmap/bankuaiStock.xml"/>
+    <sqlMap resource="sqlmap/bankuaiDetail.xml"/>
+    <sqlMap resource="sqlmap/weekData.xml"/>
+</sqlMapConfig>

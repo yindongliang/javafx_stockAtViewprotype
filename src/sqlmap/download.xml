@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="download">
+
+    <insert id="insert2Alldata" parameterClass="java.util.List">
+        insert into alldata values
+        <iterate  open="(" close=")" conjunction=",">
+            #dt[]#        
+        </iterate>
+    </insert>
+
+    <select id="checkBeforeInsert" parameterClass="answer.bean.dto.Alldata" resultClass="java.lang.Integer">
+        select count(stock_cd) from alldata where stock_cd=#stock_cd#
+        and record_date=#record_date#
+        and record_time=#record_time#
+	
+    </select>
+	
+    <select id="searchdownloadResult" parameterClass="java.util.Map" resultClass="answer.bean.dto.Alldata">
+  
+        select * from alldata where 1=1
+        <isNotEqual prepend="and " property="stock_cd" compareValue = "">
+	
+            stock_cd=#stock_cd#
+        </isNotEqual>
+        <isNotNull  property="record_date_from">
+            
+            <isNotEqual prepend="AND" property="record_date_from" compareValue = "">
+		<![CDATA[
+		 record_date>=#record_date_from#
+		  ]]>
+            </isNotEqual>
+        </isNotNull>
+        
+        <isNotNull property="record_date_to">
+            <isNotEqual prepend="AND" property="record_date_to" compareValue = "">
+		<![CDATA[
+		 record_date<=#record_date_to#
+		 ]]>
+            </isNotEqual>
+        </isNotNull>
+        
+        <isNotNull  property="orderby">
+            order by record_date $orderby$
+        </isNotNull>
+        <isNotNull  property="limit">
+            limit #limit#
+        </isNotNull>
+
+    </select>
+  
+    <insert id="insert2Alldatabk" parameterClass="java.util.List">
+        insert into alldata_bk values
+        <iterate  open="(" close=")" conjunction=",">
+            #dt[]#        
+        </iterate>
+    </insert>
+
+    <select id="checkBeforeInsertbk" parameterClass="answer.bean.dto.Alldata" resultClass="java.lang.Integer">
+        select count(stock_cd) from alldata_bk where stock_cd=#stock_cd#
+        and record_date=#record_date#
+        and record_time=#record_time#
+	
+    </select>
+    <delete id="deleteExsitingdata" parameterClass="answer.bean.dto.Alldata">
+        delete from alldata 
+        where stock_cd=#stock_cd#
+        and record_date=#record_date#
+        and record_time=#record_time#
+    </delete>
+</sqlMap>

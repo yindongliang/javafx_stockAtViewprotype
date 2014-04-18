@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="700.0" prefWidth="1200.0" xmlns:fx="http://javafx.com/fxml">
+  <children>
+    <TabPane id="tabPane1" prefHeight="651.0" prefWidth="1000.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <tabs>
+        <Tab id="tab1" text="今日股票表现">
+          <content>
+            <fx:include source="performance.fxml" />
+          </content>
+        </Tab>
+        <Tab id="tab2" text="候选股票">
+          <content>
+            <fx:include source="chooseStock.fxml" />
+          </content>
+        </Tab>
+        <Tab id="tab3" closable="false" text="分析数据">
+          <content>
+            <fx:include source="analysis.fxml" />
+          </content>
+        </Tab>
+        <Tab id="tab4" closable="false" text="读取数据">
+          <content>
+            <fx:include source="download.fxml" />
+          </content>
+        </Tab>
+        <Tab id="tab5" text="数据维护">
+          <content>
+            <fx:include source="datamaintain.fxml" />
+          </content>
+        </Tab>
+      </tabs>
+    </TabPane>
+  </children>
+</AnchorPane>

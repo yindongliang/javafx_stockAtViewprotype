@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="bankuaiDetail">
+  <typeAlias alias="BankuaiDetail" type="answer.bean.dto.BankuaiDetail" />
+
+  <select id="selectAll" resultClass="BankuaiDetail">
+    SELECT *
+      FROM bankuai_detail
+  </select>
+
+  <select id="selectAllCond" parameterClass="java.util.Map" resultClass="BankuaiDetail">
+    SELECT *
+      FROM bankuai_detail
+     WHERE 1 = 1
+    <isNotNull property="bankuai_cd">
+      <isNotEqual prepend="AND" property="bankuai_cd" compareValue="">
+        bankuai_cd = #bankuai_cd#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull property="record_date">
+      <isNotEqual prepend="AND" property="record_date" compareValue="">
+        record_date = #record_date#
+      </isNotEqual>
+    </isNotNull>
+    <isNotNull prepend="AND" property="deal_lots">
+      deal_lots = #deal_lots#
+    </isNotNull>
+    <isNotNull prepend="AND" property="over_line_cnt">
+      over_line_cnt = #over_line_cnt#
+    </isNotNull>
+    <isNotNull prepend="AND" property="stock_number">
+      stock_number = #stock_number#
+    </isNotNull>
+    <isNotNull prepend="AND" property="av_over_cnt">
+      av_over_cnt = #av_over_cnt#
+    </isNotNull>
+    <isNotNull prepend="ORDER BY" property="order">
+      <iterate conjunction=",">
+        #orderBy[]#
+      </iterate>
+      $order$
+    </isNotNull>
+    <isNotNull property="limit">
+      LIMIT #limit#
+    </isNotNull>
+  </select>
+
+  <insert id="insertAll" parameterClass="java.util.Map">
+    INSERT INTO bankuai_detail
+         VALUES (
+                 #bankuai_cd#,
+                 #record_date#,
+                 #deal_lots#,
+                 #over_line_cnt#,
+                 #stock_number#,
+                 #av_over_cnt#
+                )
+  </insert>
+
+  <insert id="insertAllList" parameterClass="java.util.List">
+    INSERT INTO bankuai_detail
+         VALUES
+    <iterate open="(" close=")" conjunction=",">
+      #dt[]#
+    </iterate>
+  </insert>
+  
+  <select id="selectDatabankuai"   parameterClass="java.util.Map"  resultClass="answer.bean.dto.Bankuai">
+        select *
+        from bankuai
+        where 1=1
+        <isNotNull  prepend="and "  property="bankuai_cd">
+            bankuai_cd=#bankuai_cd#
+        </isNotNull>
+    </select>
+    <select id="selectDatabankuaistocktarget"   parameterClass="java.util.Map"  resultClass="answer.bean.dto.BankuaiStock">
+        select *
+        from bankuai_stock
+        where 
+        bankuai_cd like '$bankuai_cd$'
+        
+    </select>
+     <select id="selectDataSpeci" parameterClass="java.util.Map" resultClass="java.lang.String">
+        select distinct
+        kdj.record_date
+        from kdj
+        <isNotNull  property="orderby">
+            order by record_date $orderby$
+        </isNotNull>
+        <isNotNull  property="limit">
+            limit #limit#
+        </isNotNull>	
+		 
+    </select>
+    
+</sqlMap>

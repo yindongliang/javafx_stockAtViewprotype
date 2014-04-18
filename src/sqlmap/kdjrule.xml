@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="kdjrule">
+
+  <select id="serchExsitingkdjrule" parameterClass="java.util.Map" resultClass="answer.bean.dto.Kdjrule">
+    
+	select * from kdj_rule  where 1=1
+        <isNotNull prepend="and " property="stock_cd">
+            stock_cd=#stock_cd#
+	</isNotNull>
+        <isNotNull prepend="and " property="kqujian">
+            kqujian=#kqujian#
+	</isNotNull>
+         <isNotNull prepend="and " property="max_cheat_num">
+            cheat_num=#cheat_num#
+	</isNotNull>
+        <isNotNull prepend="and " property="first_action">
+            first_action=#first_action#
+	</isNotNull>
+	
+  </select>
+  
+  <insert id="insert2kdjrule" parameterClass="java.util.Map">
+	insert into kdj_rule values(
+	#stock_cd#,
+        #kqujian#, 
+        #first_action#, 
+        #max_cheat_num#, 
+        #shortest_inteval_days#, 
+        #longest_inteval_days#, 
+        #second_action#, 
+        #match_count#,
+        #one_intervelday_count#,
+        #gather_spread_count#
+        )
+		
+  </insert>
+  <delete id="deletekdjrule" >
+	delete from kdj_rule 
+  </delete>
+  <update id="updateKdjrule" parameterClass="java.util.Map">
+	update kdj_rule set match_count=#match_count# 
+        <isNotNull prepend=", " property="max_cheat_num">
+            max_cheat_num=#max_cheat_num#
+	</isNotNull>
+        
+        <isNotNull prepend=", " property="one_intervelday_count">
+            one_intervelday_count=#one_intervelday_count#
+	</isNotNull>
+         <isNotNull prepend=", " property="shortest_inteval_days">
+            shortest_inteval_days=#shortest_inteval_days#
+	</isNotNull>
+         <isNotNull prepend=", " property="longest_inteval_days">
+            longest_inteval_days=#longest_inteval_days#
+	</isNotNull>
+        <isNotNull prepend=", " property="gather_spread_count">
+            gather_spread_count=#gather_spread_count#
+	</isNotNull>
+        where 1=1
+        <isNotNull prepend="and " property="stock_cd">
+            stock_cd=#stock_cd#
+	</isNotNull>
+        <isNotNull prepend="and " property="kqujian">
+            kqujian=#kqujian#
+	</isNotNull>
+        <isNotNull prepend="and " property="first_action">
+            first_action=#first_action#
+	</isNotNull>
+  </update>
+  
+  
+  
+</sqlMap>

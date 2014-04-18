@@ -1,0 +1,584 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package stockatview.handle;
+
+import answer.bean.dto.Analyzedresultdata;
+import answer.exception.Axexception;
+import answer.exception.Axinfo;
+import answer.logic.*;
+
+import java.io.IOException;
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+import com.sai.javafx.calendar.FXCalendar;
+import com.sai.javafx.calendar.FXCalendarUtility;
+import java.io.UnsupportedEncodingException;
+import org.apache.http.client.ClientProtocolException;
+import org.javafxdata.control.cell.CheckBoxCellFactory;
+import org.xvolks.jnative.exceptions.NativeException;
+import stockatview.StockATView;
+import stockatview.checker.InputChecker;
+import stockatview.dialog.CustomizeDialog;
+import stockatview.thread.GetCandidateThr;
+import stockatview.util.ComparatorStrA;
+import stockatview.util.ViewUtils;
+
+/**
+ *
+ * @author doyin
+ */
+public class ChooseStock implements Initializable {
+
+    @FXML
+    private ProgressBar compgr;
+    @FXML
+    private ProgressIndicator proindic;
+    @FXML
+    private RadioButton todayfarword;
+    @FXML
+    private RadioButton todaynot0;
+    @FXML
+    private RadioButton category;
+    @FXML
+    private RadioButton category2;
+    @FXML
+    private TableView resulttb;
+    @FXML
+    private TableColumn rule_id;
+    @FXML
+    private TableColumn stock_cd;
+    @FXML
+    private TableColumn record_date;
+    @FXML
+    private TableColumn chose;
+    @FXML
+    private TableColumn record_time;
+    @FXML
+    private TableColumn amount;
+    @FXML
+    private TableColumn track;
+    @FXML
+    private TableColumn status;
+    @FXML
+    private TableColumn advisor;
+    @FXML
+    private TableColumn res_up_down;
+    @FXML
+    private TableColumn liangbi;
+    @FXML
+    private TableColumn stockname;
+    @FXML
+    private TextField limitrule;
+    @FXML
+    private FXCalendar search_date;
+    @FXML
+    private TextField con_amount_incr;
+    @FXML
+    private TextField eve_stock_buymoney;
+    @FXML
+    private TextField target_ruleid;
+    @FXML
+    private Label recordscnt;
+    private boolean completeflg = false;
+    private Thread thr1;
+    private Thread thr2;
+    private List<GetCandidateThr> ls;
+    @FXML
+    private BarChart rulechart;
+    @FXML
+    private PieChart categorychart;
+    @FXML
+    private CategoryAxis incrrange;
+    @FXML
+    private NumberAxis stockcnt;
+    @FXML
+    private Label timer;
+    @FXML
+    private Label usable_money;
+    @FXML
+    private TextField chosecnt;
+    private Map<String, String> ischeckok = new HashMap<String, String>();
+
+    @FXML
+    private void handleCandidateAction(ActionEvent event) {
+
+        if (ischeckok.get("limitrule") != null && ischeckok.get("limitrule").contains("0")) {
+            CustomizeDialog.showMessage();
+            return;
+        }
+        thr1 = new Thread() {
+
+            public void run() {
+                long startTime = System.currentTimeMillis();
+                compgr.setProgress(0);
+                proindic.setProgress(0);
+                while (compgr.getProgress() < 1) {
+
+                    final String time = ViewUtils.timer(startTime);
+                    Platform.runLater(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            timer.setText("用时:" + time);
+                        }
+                    });
+                    try {
+                        sleep(1000);
+                        if (((!completeflg && compgr.getProgress() <= 0.5F) || completeflg) && (thr2 != null && thr2.isAlive())) {
+                            compgr.setProgress(compgr.getProgress() + 0.01);
+                            proindic.setProgress(proindic.getProgress() + 0.01);
+                        }
+                        if (completeflg && thr2 != null && !thr2.isAlive()) {
+                            compgr.setProgress(1);
+                            proindic.setProgress(1);
+                            break;
+                        }
+
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        ;
+        };   
+        
+       
+        
+        thr2 = new Thread() {
+
+            public void run() {
+
+                CommonLogic cl = (CommonLogic) StockATView.ac.getBean("CommonLogic");
+                StockCandidate sc = (StockCandidate) StockATView.ac.getBean("StockCandidate");
+
+                int threadcount = 100;
+                int t = cl.getLs_shsz().size() / threadcount;
+
+                boolean flg = todaynot0.isSelected();
+                int limit_forward = Integer.parseInt(limitrule.getText());
+                ls = new ArrayList<GetCandidateThr>();
+                for (int i = 0; i < threadcount; i++) {
+                    if (i == threadcount - 1) {
+                        ls.add(new GetCandidateThr(sc, cl.getLs_shsz().subList(i * t, cl.getLs_shsz().size()), flg, limit_forward));
+                    } else {
+                        ls.add(new GetCandidateThr(sc, cl.getLs_shsz().subList(i * t, (i + 1) * t), flg, limit_forward));
+                    }
+                }
+
+                for (int j = 0; j < ls.size(); j++) {
+                    try {
+                        if (j == 0) {
+                            completeflg = ls.get(j).isCopflg();
+                        } else if (completeflg) {
+                            completeflg = completeflg && ls.get(j).isCopflg();
+                        }
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+            }
+        };
+
+        thr1.start();
+        ((StockCandidate) StockATView.ac.getBean("StockCandidate")).deletetodayExistingCandidate();
+        thr2.start();
+    }
+
+    @FXML
+    private void handleAbortAction(ActionEvent event) {
+        thr1.stop();
+        thr2.stop();
+        completeflg = false;
+        for (GetCandidateThr gthr : ls) {
+            gthr.stop();;
+        }
+        Thread thr3 = new Thread() {
+
+            public void run() {
+
+                while (compgr.getProgress() > 0) {
+                    try {
+                        sleep(30);
+                        if (compgr.getProgress() - 0.01 > 0) {
+                            compgr.setProgress(compgr.getProgress() - 0.01);
+                            proindic.setProgress(proindic.getProgress() - 0.01);
+                        } else {
+                            compgr.setProgress(0);
+                            proindic.setProgress(0);
+
+
+                        }
+
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Download.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        ;
+        }; 
+        compgr.setProgress(0);
+        proindic.setProgress(0);
+//        thr3.start();
+    }
+
+    @FXML
+    private void handleSearchAction(ActionEvent event) {
+        if (ischeckok.get("search_date") != null && ischeckok.get("search_date").contains("0")) {
+            CustomizeDialog.showMessage();
+            return;
+        }
+        if (rule_id.getCellValueFactory() == null) {
+            rule_id.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("rule_id"));
+            stock_cd.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("stock_cd"));
+
+            track.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("stock_cd"));
+            track.setCellFactory(new Callback<TableColumn<Analyzedresultdata, String>, TableCell<Analyzedresultdata, String>>() {
+
+                @Override
+                public TableCell<Analyzedresultdata, String> call(TableColumn<Analyzedresultdata, String> param) {
+                    return new TableCell<Analyzedresultdata, String>() {
+
+                        private HBox buttons;
+
+                        {
+                            ImageView acceptImg = new ImageView(new Image(getClass().getResourceAsStream("check.png")));
+
+
+                            acceptImg.setCursor(Cursor.HAND);
+
+                            acceptImg.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                                    new EventHandler<MouseEvent>() {
+
+                                        @Override
+                                        public void handle(MouseEvent e) {
+
+                                            Set<Analyzedresultdata> selection = new HashSet<Analyzedresultdata>(resulttb.getSelectionModel().getSelectedItems());
+                                            for (Iterator<Analyzedresultdata> it = selection.iterator(); it.hasNext();) {
+
+                                                String stockcd = it.next().getStock_cd();
+
+                                                if (stockcd.startsWith("60")) {
+                                                    stockcd = "sh" + stockcd;
+                                                } else {
+                                                    stockcd = "sz" + stockcd;
+                                                }
+
+                                                StockATView.hs.showDocument("http://i3.sinaimg.cn/cj/flash/hq_a/SinaKLine120419.swf?symbol=" + stockcd);
+                                            }
+                                        }
+                                    });
+                            buttons = new HBox(3);
+                            buttons.setAlignment(Pos.CENTER);
+                            buttons.getChildren().addAll(acceptImg);
+                            setGraphic(buttons);
+                            setAlignment(Pos.CENTER);
+                        }
+
+                        @Override
+                        protected void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            setGraphic(empty ? null : buttons);
+                        }
+                    };
+                }
+            });
+
+            record_date.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("record_date"));
+            record_time.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("record_time"));
+            amount.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("stockcnt"));
+            chose.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Analyzedresultdata, Boolean>, ObservableValue<Boolean>>() {
+
+                @Override
+                public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Analyzedresultdata, Boolean> cdf) {
+                    return cdf.getValue().telecommuterProperty();
+                }
+            });
+            chose.setCellFactory(CheckBoxCellFactory.forTableColumn(chose));
+            res_up_down.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("res_up_down"));
+            status.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("status"));
+            advisor.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("buy_advisor"));
+            stockname.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("name"));
+            liangbi.setCellValueFactory(new PropertyValueFactory<Analyzedresultdata, String>("lotsbili"));
+        }
+        List<Analyzedresultdata> analyzedresultdata;
+        Map<String, String> condition = new HashMap<String, String>();
+
+        condition.put("record_date", search_date.getTextField().getText());
+        if (todaynot0.isSelected()) {
+            condition.put("rule_id", "1");
+
+        }
+        analyzedresultdata = ((StockSearch) StockATView.ac.getBean("StockSearch")).getAnalyzedData(condition);
+
+        ObservableList<Analyzedresultdata> data = FXCollections.observableArrayList(analyzedresultdata);
+
+
+        resulttb.setItems(data);
+
+        recordscnt.setText("共" + analyzedresultdata.size() + "条记录");
+        setCharts(analyzedresultdata);
+
+    }
+
+    private void setCharts(List<Analyzedresultdata> analyzedresultdata) {
+
+        Analyzedresultdata anzdata = null;
+
+        int zb = 0;
+        int cyb = 0;
+        int zxb = 0;
+
+        HashSet hs = new HashSet();
+        for (int i = 0; i < analyzedresultdata.size(); i++) {
+            anzdata = analyzedresultdata.get(i);
+            hs.add(new String[]{anzdata.getRule_id() + "",
+                        anzdata.getStockcnt() + "",
+                        anzdata.getRes_up_down(),
+                        anzdata.getRes_yd_increase_range() + "",
+                        anzdata.getCon_ydincrange_accuracy() + "",
+                        anzdata.getRes_tot_increase_range() + "",
+                        anzdata.getCon_hsrangeammount_accuracy() + "",
+                        anzdata.getCon_incr_range_from() + "",
+                        anzdata.getCon_incr_range_to() + ""
+                    });
+            if (anzdata.getStock_cd().startsWith("60")) {
+                zb++;
+            }
+            if (anzdata.getStock_cd().startsWith("30")) {
+                cyb++;
+            }
+            if (anzdata.getStock_cd().startsWith("00")) {
+                zxb++;
+            }
+        }
+
+        List<String[]> ls = new ArrayList<String[]>();
+        ls.addAll(hs);
+        ComparatorStrA comparator = new ComparatorStrA();
+        Collections.sort(ls, comparator);
+
+        rulechart.setTitle("规则分布图");
+        incrrange.setLabel("规则");
+        stockcnt.setLabel("股票数");
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("算出数目");
+
+        for (int j = 0; j < ls.size(); j++) {
+            series1.getData().add(new XYChart.Data(ls.get(j)[0] + "\r\n" + ls.get(j)[2] + "\r\n" + ls.get(j)[3] + "+-" + ls.get(j)[4]
+                    + "\r\n" + ls.get(j)[5] + "+-" + ls.get(j)[6]
+                    + "\r\n" + ls.get(j)[7] + "~" + ls.get(j)[8],
+                    Integer.parseInt(ls.get(j)[1])));
+        }
+
+        rulechart.getData().clear();
+        rulechart.getData().addAll(series1);
+
+        ObservableList<PieChart.Data> pieChartData =
+                FXCollections.observableArrayList(
+                new PieChart.Data("主板", zb),
+                new PieChart.Data("创业板", cyb),
+                new PieChart.Data("中小板", zxb));
+
+        categorychart.setTitle("板块分布图");
+        categorychart.getData().clear();
+        categorychart.setData(pieChartData);
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+
+        ToggleGroup group = new ToggleGroup();
+
+        todayfarword.setToggleGroup(group);
+
+        todaynot0.setToggleGroup(group);
+
+        todayfarword.setSelected(true);
+        limitrule.setText("10");
+        eve_stock_buymoney.setText("7000");
+//        double sh_incr=((StockAnalysis) StockATView.ac.getBean("StockAnalysis")).getShangHaiHistoryIncr();
+//        con_amount_incr.setText(sh_incr+"");
+        con_amount_incr.setText("");
+        con_amount_incr.setDisable(true);
+        String fmt = "yyyy-MM-dd";
+        String date = ViewUtils.dateFormater(fmt);
+
+        search_date.setShowWeekNumber(true);
+        search_date.setValue(new FXCalendarUtility().convertStringtoDate(date));
+
+        resulttb.setEditable(true);
+        try {
+            try {
+                usable_money.setText("" + ((StockBuyer) StockATView.ac.getBean("StockBuyer")).getusablemoney());
+
+
+            } catch (NativeException ex) {
+                Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (Axexception ex) {
+            CustomizeDialog.showCustominfo(ex.getMsg());
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        limitrule.focusedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+                if (InputChecker.checkPlusNumber(limitrule, false)) {
+                    ischeckok.put("limitrule", "1");
+                } else {
+                    ischeckok.put("limitrule", "0");
+                }
+            }
+        });
+
+        eve_stock_buymoney.focusedProperty().addListener(new ChangeListener<Boolean>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+                if (InputChecker.checkBuymoney(eve_stock_buymoney)) {
+                    ischeckok.put("eve_stock_buymoney", "1");
+                } else {
+                    ischeckok.put("eve_stock_buymoney", "0");
+                }
+            }
+        });
+
+    }
+    private boolean isallselected = false;
+
+    @FXML
+    private void handleSelectAllAction(ActionEvent event) {
+        ObservableList<Analyzedresultdata> datals = resulttb.getItems();
+        if (datals == null || datals.size() == 0) {
+            CustomizeDialog.showCustominfo("没有可选股票！");
+            return;
+        }
+        if (target_ruleid.getText() != null && !target_ruleid.getText().equals("")) {
+            if (!isallselected) {
+                for (Analyzedresultdata ard : datals) {
+                    if (target_ruleid.getText().equals("" + ard.getRule_id())) {
+                        ard.setTelecommuter(true);
+                        isallselected = true;
+                    }
+                }
+            } else {
+                for (Analyzedresultdata ard : datals) {
+                    if (target_ruleid.getText().equals("" + ard.getRule_id())) {
+                        ard.setTelecommuter(false);
+                        isallselected = false;
+                    }
+
+                }
+
+            }
+            return;
+
+        }
+
+        if (!isallselected) {
+            for (Analyzedresultdata ard : datals) {
+                ard.setTelecommuter(true);
+                isallselected = true;
+            }
+        } else {
+            for (Analyzedresultdata ard : datals) {
+                ard.setTelecommuter(false);
+                isallselected = false;
+            }
+        }
+
+    }
+
+    @FXML
+    private void handleBuySelectedStockction(ActionEvent event) {
+        if (ischeckok.get("eve_stock_buymoney") != null && ischeckok.get("eve_stock_buymoney").contains("0")) {
+            CustomizeDialog.showMessage();
+            return;
+        }
+        ObservableList<Analyzedresultdata> datals = resulttb.getItems();
+        if (datals == null || datals.size() == 0) {
+            CustomizeDialog.showCustominfo("没有可买股票！");
+            return;
+        }
+        double usablemoney = Double.parseDouble(usable_money.getText());
+        double ev_stock_buymony = Double.parseDouble(eve_stock_buymoney.getText());
+        if (usablemoney < 7000 || usablemoney < usablemoney) {
+            CustomizeDialog.showCustominfo("账户可用资金不足7000！或者不足指定金额！");
+            return;
+        }
+        try {
+
+            if (((StockBuyer) StockATView.ac.getBean("StockBuyer")).buy(datals, Integer.parseInt(eve_stock_buymoney.getText())).equals("0")) {
+                usable_money.setText("" + ((StockBuyer) StockATView.ac.getBean("StockBuyer")).getusablemoney());
+
+            }
+
+        } catch (NativeException ex) {
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Axexception ex) {
+            CustomizeDialog.showCustominfo(ex.getMsg());
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Axinfo ex) {
+            Map<String, String> mp = ex.getMapinfo();
+            Set<String> keys = mp.keySet();
+            StringBuilder sb = new StringBuilder();
+            for (String key : keys) {
+                sb.append(key + " : " + mp.get(key) + "\r\n");
+            }
+            CustomizeDialog.showCustominfo(sb.toString());
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @FXML
+    private void handleUpdateStatusAction(ActionEvent event) {
+        ObservableList<Analyzedresultdata> datals = resulttb.getItems();
+        if (datals == null || datals.size() == 0) {
+            CustomizeDialog.showCustominfo("没有股票！");
+            return;
+        }
+
+        try {
+            ((StockBuyer) StockATView.ac.getBean("StockBuyer")).checkEntrustStatus(datals);
+
+
+        } catch (NativeException ex) {
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Axexception ex) {
+            CustomizeDialog.showCustominfo(ex.getMsg());
+            Logger.getLogger(ChooseStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+}
